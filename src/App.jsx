@@ -248,53 +248,6 @@ export default function App() {
   );
 };
 
-const Gallery = () => {
-  // PLACEHOLDERS: Replace src with actual paths like "/mom1.jpg" later
-  const photos = [
-    { id: 1, src: "/images/image1.jpeg", alt: "Beautiful memory 1", rotation: "rotate-2" },
-    { id: 2, src: "/images/image2.jpeg", alt: "Beautiful memory 2", rotation: "-rotate-1" },
-    { id: 3, src: "/images/image3.jpeg", alt: "Beautiful memory 3", rotation: "rotate-3" },
-    { id: 4, src: "/images/image4.jpeg", alt: "Beautiful memory 4", rotation: "-rotate-2" },
-  ];
-
-  return (
-    <section className="py-20 bg-[#FDFBF7]">
-      <motion.h2 
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="text-center font-serif text-4xl text-[#2A2A2A] mb-16"
-      >
-        Cherished Memories
-      </motion.h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 max-w-7xl mx-auto">
-        {photos.map((photo) => (
-          <motion.div
-            key={photo.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            whileHover={{ scale: 1.05, zIndex: 10 }}
-            transition={{ duration: 0.5 }}
-            className={`bg-white p-4 shadow-lg rounded-sm transform ${photo.rotation} hover:rotate-0 transition-all duration-300`}
-          >
-            <div className="w-full h-64 overflow-hidden mb-4">
-              <img 
-                src={photo.src} 
-                alt={photo.alt}
-                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                loading="lazy"
-              />
-            </div>
-            <div className="text-center font-sans text-gray-600 text-sm">
-              Memory {photo.id}
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </section>
-  );
-};
 
 const CakeSection = () => {
   const [wished, setWished] = useState(false);
