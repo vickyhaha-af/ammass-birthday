@@ -47,8 +47,7 @@ const PhotoGallery = () => {
             <motion.div
               key={photo.id}
               className="polaroid relative break-inside-avoid"
-              initial={{ opacity: 0, rotate: photo.rotation }}
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              initial={{ opacity: 0, y: 20, scale: 0.95, rotate: photo.rotation }}
           whileInView={{ opacity: 1, y: 0, scale: 1 }}
           viewport={{ once: true, margin: "-50px" }}
           whileHover={{ 
