@@ -11,115 +11,193 @@ const AuroraBackground = () => (
 const Hero = () => {
   const [showConfetti, setShowConfetti] = useState(true);
   
+  // Personalized messages that cycle through
+  const messages = [
+    "To the world's best Amma, from your loving son",
+    "Your love is my greatest blessing",
+    "Every day with you is a gift",
+    "Your strength inspires me always"
+  ];
+  const [currentMessage, setCurrentMessage] = useState(0);
+
+  // Cycle through messages
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentMessage((prev) => (prev + 1) % messages.length);
+    }, 3000);
+    return () => clearInterval(interval);
+  }, []);
+  
   return (
-    <section className="relative py-20 md:py-32 flex flex-col items-center justify-center p-6 text-center overflow-hidden">
-      {/* Floating Hearts */}
-      {[...Array(15)].map((_, i) => (
-        <motion.div
-          key={i}
-          className="absolute text-pink-400 opacity-70"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            fontSize: `${Math.random() * 20 + 10}px`,
-          }}
-          animate={{
-            y: [0, -100],
-            opacity: [0.7, 0],
-            scale: [1, 1.5],
-          }}
-          transition={{
-            duration: Math.random() * 3 + 2,
-            repeat: Infinity,
-            repeatType: 'loop',
-            delay: Math.random() * 5,
-          }}
-        >
-          ❤️
-        </motion.div>
-      ))}
-      
-      <motion.div
-        initial={{ scale: 0.9, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ duration: 0.8, type: 'spring' }}
-        className="relative z-10"
-      >
-        <div className="relative inline-block">
-          <motion.div 
-            className="absolute -inset-4 bg-rose-100 rounded-full opacity-70"
+    <section className="relative min-h-screen flex flex-col items-center justify-center p-6 text-center overflow-hidden bg-gradient-to-b from-rose-50 to-pink-50">
+      {/* Animated floating elements */}
+      {[...Array(20)].map((_, i) => {
+        const size = Math.random() * 20 + 10;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 10 + 10;
+        const elements = ['🌸', '✨', '💖', '🎀', '🎈', '🎁', '🎉'];
+        const element = elements[Math.floor(Math.random() * elements.length)];
+        
+        return (
+          <motion.div
+            key={i}
+            className="absolute pointer-events-none"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              fontSize: `${size}px`,
+              opacity: 0.7,
+            }}
             animate={{
-              scale: [1, 1.1, 1],
-              opacity: [0.7, 0.9, 0.7],
+              y: [0, -100],
+              x: [0, Math.random() * 100 - 50],
+              rotate: [0, 360],
+              opacity: [0.7, 0],
             }}
             transition={{
-              duration: 3,
+              duration: duration,
               repeat: Infinity,
-              repeatType: 'reverse',
+              repeatType: 'loop',
+              delay: delay,
+              ease: "linear"
             }}
-          />
-          <motion.h1 
+          >
+            {element}
+          </motion.div>
+        );
+      })}
+      
+      <div className="relative z-10 max-w-4xl mx-auto px-4">
+        {/* Animated background circle */}
+        <motion.div 
+          className="absolute -z-10 w-[150%] h-[150%] md:w-[120%] md:h-[120%] rounded-full bg-gradient-to-r from-rose-100 to-pink-100 opacity-70"
+          animate={{
+            scale: [1, 1.1, 1],
+            rotate: [0, 5, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            repeatType: 'reverse',
+            ease: "easeInOut"
+          }}
+        />
+        
+        <motion.div
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.8, type: 'spring' }}
+          className="relative z-20"
+        >
+          {/* Main heading */}
+          <motion.div 
+            className="inline-block relative"
+            whileHover={{ scale: 1.02 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
+            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl text-rose-900 mb-6 leading-tight">
+              Happy Birthday
+              <motion.span 
+                className="block font-bold mt-2 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-rose-600"
+                animate={{
+                  scale: [1, 1.05, 1],
+                  textShadow: [
+                    '0 0 10px rgba(236, 72, 153, 0.3)',
+                    '0 0 20px rgba(236, 72, 153, 0.5)',
+                    '0 0 10px rgba(236, 72, 153, 0.3)'
+                  ]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  repeatType: 'reverse',
+                }}
+              >
+                Amma Simithaa! �
+              </motion.span>
+            </h1>
+          </motion.div>
+          
+          {/* Animated message */}
+          <AnimatePresence mode="wait">
+            <motion.p 
+              key={currentMessage}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.5 }}
+              className="text-xl md:text-2xl text-pink-700 mt-6 max-w-2xl mx-auto font-medium italic"
+            >
+              {messages[currentMessage]}
+            </motion.p>
+          </AnimatePresence>
+          
+          {/* CTA Buttons */}
+          <motion.div 
+            className="mt-12 flex flex-wrap justify-center gap-4"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="font-serif text-5xl md:text-7xl text-rose-900 mb-4 relative z-10"
+            transition={{ delay: 0.4 }}
           >
-            Happy Birthday <span className="block md:inline">Amma</span> <br className="md:hidden" />
-            <motion.span 
-              className="text-rose-700 inline-block"
-              animate={{
-                scale: [1, 1.1, 1],
-                rotate: [-5, 5, -5],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-                repeatType: 'reverse',
-              }}
+            <motion.button
+              whileHover={{ scale: 1.05, boxShadow: '0 10px 25px -5px rgba(236, 72, 153, 0.2)' }}
+              whileTap={{ scale: 0.98 }}
+              className="px-8 py-4 bg-gradient-to-r from-pink-500 to-rose-500 text-white rounded-full font-medium text-lg shadow-lg flex items-center gap-3 hover:shadow-xl transition-all"
             >
-              Simithaa! 🎉
-            </motion.span>
-          </motion.h1>
-        </div>
-        
-        <motion.p 
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.8 }}
-          className="text-rose-800 text-xl md:text-2xl mt-6 max-w-2xl font-medium"
-        >
-          A celebration of your love, strength, and grace
-        </motion.p>
-        
-        <motion.div 
-          className="mt-8 flex justify-center gap-4"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-        >
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-600 text-white rounded-full font-medium shadow-lg flex items-center gap-2"
+              <Sparkles className="w-6 h-6" />
+              Send Love & Wishes
+            </motion.button>
+            
+            <motion.a
+              href="#memories"
+              whileHover={{ scale: 1.03, backgroundColor: 'rgba(251, 207, 232, 0.3)' }}
+              whileTap={{ scale: 0.98 }}
+              className="px-6 py-4 bg-white/80 backdrop-blur-sm text-rose-600 rounded-full font-medium text-lg border-2 border-rose-200 flex items-center gap-2 hover:bg-rose-50 transition-colors"
+            >
+              View Memories
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+              </svg>
+            </motion.a>
+          </motion.div>
+          
+          {/* Decorative elements */}
+          <motion.div 
+            className="absolute -bottom-20 left-1/2 transform -translate-x-1/2 text-6xl opacity-10"
+            animate={{ y: [0, -15, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
-            <Sparkles className="w-5 h-5" />
-            Send Love
-          </motion.button>
+            ❤️
+          </motion.div>
         </motion.div>
-      </motion.div>
+      </div>
       
+      {/* Confetti */}
       <AnimatePresence>
         {showConfetti && (
           <Confetti
             width={typeof window !== 'undefined' ? window.innerWidth : 0}
             height={typeof window !== 'undefined' ? window.innerHeight : 0}
             recycle={false}
-            numberOfPieces={200}
+            numberOfPieces={300}
             onConfettiComplete={() => setShowConfetti(false)}
             className="w-full h-full"
+            colors={['#FF9DB5', '#FFC2D1', '#F8BBD0', '#F48FB1', '#F06292']}
           />
         )}
       </AnimatePresence>
+      
+      {/* Animated scroll indicator */}
+      <motion.div 
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center text-rose-400"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <span className="text-sm mb-1">Scroll Down</span>
+        <svg className="w-6 h-6 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+        </svg>
+      </motion.div>
     </section>
   );
 };
@@ -247,59 +325,228 @@ const HaikuSection = () => {
 };
 
 const Gallery = () => {
-  // Pre-defined messy positions so they look scattered naturally
+  // Pre-defined positions for a more organic look
   const scatterPositions = [
-    { top: "10%", left: "20%", rotate: "-6deg" },
-    { top: "30%", left: "60%", rotate: "8deg" },
-    { top: "50%", left: "15%", rotate: "-3deg" },
-    { top: "15%", left: "70%", rotate: "12deg" },
-    { top: "60%", left: "50%", rotate: "-10deg" },
+    { top: "15%", left: "15%", rotate: "-8deg", scale: 0.9 },
+    { top: "25%", left: "65%", rotate: "5deg", scale: 1.1 },
+    { top: "55%", left: "20%", rotate: "-12deg", scale: 1 },
+    { top: "20%", left: "70%", rotate: "15deg", scale: 0.95 },
+    { top: "60%", left: "55%", rotate: "-5deg", scale: 1.05 },
+    { top: "35%", left: "35%", rotate: "8deg", scale: 0.9 },
+    { top: "70%", left: "75%", rotate: "-15deg", scale: 1.1 },
   ];
 
-  // REPLACE THESE PATHS WITH YOUR REAL PHOTOS LATER
+  // Photo data with captions
   const photos = [
-    "/images/image1.jpeg", 
-    "/images/image2.jpeg", 
-    "/images/image3.jpeg", 
-    "/images/image4.jpeg",
-    "/images/image1.jpeg"
+    { 
+      src: "/images/image1.jpeg",
+      caption: "Your beautiful smile lights up our lives",
+      date: "2023"
+    },
+    { 
+      src: "/images/image2.jpeg",
+      caption: "Our precious moments together",
+      date: "2022"
+    },
+    { 
+      src: "/images/image3.jpeg",
+      caption: "Your strength inspires me",
+      date: "2021"
+    },
+    { 
+      src: "/images/image4.jpeg",
+      caption: "Forever grateful for you",
+      date: "2020"
+    },
+    { 
+      src: "/images/image1.jpeg",
+      caption: "My guiding light",
+      date: "2019"
+    },
   ];
+
+  // Animated emojis for decoration
+  const emojis = ['💖', '✨', '🌸', '🎈', '🎁', '🎉', '💐', '🎊'];
 
   return (
-    <section className="relative h-[800px] w-full bg-[#FDFBF7] overflow-hidden">
-      <h2 className="text-center font-serif text-4xl text-[#2A2A2A] pt-20 mb-8">Our Memories</h2>
-      <p className="text-center text-gray-400 mb-12">(Drag them around!)</p>
-      
-      <div className="relative w-full h-full max-w-4xl mx-auto">
-        {photos.map((src, index) => (
+    <section id="memories" className="relative min-h-screen w-full bg-gradient-to-b from-pink-50 to-rose-50 py-20 overflow-hidden">
+      {/* Animated background elements */}
+      {[...Array(15)].map((_, i) => {
+        const size = Math.random() * 30 + 20;
+        const delay = Math.random() * 5;
+        const duration = Math.random() * 10 + 10;
+        const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+        
+        return (
           <motion.div
-            key={index}
-            drag
-            dragConstraints={{ left: -200, right: 200, top: -200, bottom: 200 }}
-            whileHover={{ scale: 1.1, zIndex: 50, rotate: 0, boxShadow: "0px 20px 40px rgba(0,0,0,0.2)" }}
-            whileTap={{ scale: 1.15, cursor: "grabbing" }}
-            style={{ 
-                position: 'absolute', 
-                top: scatterPositions[index]?.top || `${index*10}%`, 
-                left: scatterPositions[index]?.left || `${index*5}%`,
-                rotate: scatterPositions[index]?.rotate || '0deg'
+            key={`emoji-${i}`}
+            className="absolute pointer-events-none opacity-20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              fontSize: `${size}px`,
+              zIndex: 0,
             }}
-            className="w-48 h-64 bg-white p-3 pb-8 shadow-xl rounded-sm cursor-grab transition-all border-[6px] border-white hover:shadow-2xl"
+            animate={{
+              y: [0, -50, 0],
+              rotate: [0, 360],
+              scale: [1, 1.2, 1],
+            }}
+            transition={{
+              duration: duration,
+              repeat: Infinity,
+              repeatType: 'reverse',
+              delay: delay,
+              ease: "easeInOut"
+            }}
           >
-            {/* Photo placeholder */}
-            <div className="w-full h-full bg-gray-100 overflow-hidden">
-                <img 
-                  src={src} 
-                  alt="Memory" 
-                  className="w-full h-full object-cover pointer-events-none" 
-                  onError={(e) => {
-                    e.target.style.display='none'; 
-                    e.target.parentNode.classList.add('bg-rose-100')
-                  }}
-                />
-            </div>
+            {emoji}
           </motion.div>
-        ))}
+        );
+      })}
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <h2 className="font-serif text-4xl md:text-5xl text-rose-900 mb-4">
+            Our Precious Memories
+          </h2>
+          <p className="text-xl text-rose-700 max-w-2xl mx-auto">
+            Drag the photos around and relive our beautiful moments together
+          </p>
+          <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-rose-500 mx-auto mt-6 rounded-full" />
+        </motion.div>
+        
+        <div className="relative w-full min-h-[600px] md:min-h-[800px]">
+          {photos.map((photo, index) => {
+            const pos = scatterPositions[index % scatterPositions.length];
+            
+            return (
+              <motion.div
+                key={`photo-${index}`}
+                drag
+                dragConstraints={{ 
+                  left: -200, 
+                  right: 200, 
+                  top: -200, 
+                  bottom: 200 
+                }}
+                whileHover={{ 
+                  scale: 1.05, 
+                  zIndex: 50, 
+                  rotate: 0, 
+                  boxShadow: '0 25px 50px -12px rgba(236, 72, 153, 0.25)'
+                }}
+                whileTap={{ 
+                  scale: 1.1, 
+                  cursor: 'grabbing',
+                  boxShadow: '0 20px 45px -10px rgba(236, 72, 153, 0.3)'
+                }}
+                initial={{
+                  opacity: 0,
+                  scale: 0.8,
+                  y: 50,
+                  rotate: pos.rotate,
+                  x: 0
+                }}
+                animate={{
+                  opacity: 1,
+                  scale: pos.scale,
+                  y: 0,
+                  rotate: pos.rotate,
+                  x: 0,
+                  transition: {
+                    delay: index * 0.1,
+                    duration: 0.6,
+                    type: 'spring',
+                    stiffness: 100,
+                    damping: 10
+                  }
+                }}
+                style={{ 
+                  position: 'absolute',
+                  top: pos.top,
+                  left: pos.left,
+                  rotate: pos.rotate,
+                  zIndex: 10 + index,
+                }}
+                className="group cursor-grab active:cursor-grabbing"
+              >
+                <div className="w-48 h-64 md:w-56 md:h-72 bg-white rounded-xl shadow-xl overflow-hidden transform transition-all duration-300 group-hover:shadow-2xl">
+                  <div className="relative w-full h-4/5 overflow-hidden">
+                    <img 
+                      src={photo.src} 
+                      alt={`Memory ${index + 1}`} 
+                      className="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-110"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentNode.classList.add('bg-gradient-to-br', 'from-pink-100', 'to-rose-100');
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                      <div className="text-white text-left transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        <p className="font-medium text-sm">{photo.date}</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-white">
+                    <p className="text-sm text-rose-800 font-medium truncate">{photo.caption}</p>
+                    <div className="flex justify-between items-center mt-1">
+                      <span className="text-xs text-rose-400">❤️ {Math.floor(Math.random() * 50) + 10} likes</span>
+                      <button className="text-pink-500 hover:text-rose-600 transition-colors">
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+          
+          {/* Decorative floating hearts */}
+          {[...Array(3)].map((_, i) => (
+            <motion.div
+              key={`heart-${i}`}
+              className="absolute text-pink-300 text-4xl"
+              style={{
+                left: `${10 + i * 40}%`,
+                top: '90%',
+                zIndex: 5,
+              }}
+              animate={{
+                y: [0, -30, 0],
+                scale: [1, 1.2, 1],
+                opacity: [0.7, 1, 0.7],
+              }}
+              transition={{
+                duration: 3 + i,
+                repeat: Infinity,
+                repeatType: 'reverse',
+                ease: 'easeInOut',
+              }}
+            >
+              ❤️
+            </motion.div>
+          ))}
+        </div>
+        
+        <motion.div 
+          className="text-center mt-20"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ delay: 0.3 }}
+        >
+          <p className="text-rose-800 mb-6">Scroll down for more love and surprises!</p>
+          <div className="w-12 h-1 bg-gradient-to-r from-pink-400 to-rose-500 mx-auto rounded-full" />
+        </motion.div>
       </div>
     </section>
   );
