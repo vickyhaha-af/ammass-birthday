@@ -18,8 +18,29 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.2;
 }
 
+@layer base {
+  html {
+    @apply scroll-smooth;
+  }
+  body {
+    @apply bg-[#FDFBF7] text-gray-800 font-sans;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  @apply w-2;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-[#D4AF37] rounded-full;
+}
+
+/* Glassmorphism effect */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
+  @apply backdrop-blur-sm bg-white/30;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);

@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
@@ -7,20 +7,24 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['"Playfair Display"', 'serif'],
         sans: ['Lato', 'sans-serif'],
+        serif: ['"Playfair Display"', 'serif'],
       },
       colors: {
-        gold: '#D4AF37',
-        rose: '#E8D5C4',
-        sage: '#D3E0DC',
-        cream: '#FDFBF7',
+        'cream': '#FDFBF7',
+        'dusty-rose': '#E8D5C4',
+        'sage-green': '#D3E0DC',
+        'antique-gold': '#D4AF37',
       },
       animation: {
-        'float': 'float 6s ease-in-out infinite',
-        'pulse-slow': 'pulse 6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'fade-in': 'fadeIn 1.5s ease-out',
+        'float': 'float 3s ease-in-out infinite',
       },
       keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
