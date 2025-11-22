@@ -136,7 +136,7 @@ const MemoryGallery = () => {
 }
 
 const LoveLetter = () => {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <section className="min-h-screen flex items-center justify-center p-6">
@@ -173,7 +173,7 @@ const LoveLetter = () => {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
 
 const Footer = () => (
