@@ -246,112 +246,99 @@ const HaikuSection = () => {
   );
 };
 
-const MemoryGallery = () => {
-  const [photos] = useState(() => 
-    Array.from({ length: 8 }, (_, i) => ({
-      id: i + 1,
-      x: Math.random() * 60 - 30,
-      y: Math.random() * 40 - 20,
-      rotate: Math.random() * 20 - 10,
-      src: `/images/image${(i % 4) + 1}.jpeg`
-    }))
-  );
+const Gallery = () => {
+  // Pre-defined messy positions so they look scattered naturally
+  const scatterPositions = [
+    { top: "10%", left: "20%", rotate: "-6deg" },
+    { top: "30%", left: "60%", rotate: "8deg" },
+    { top: "50%", left: "15%", rotate: "-3deg" },
+    { top: "15%", left: "70%", rotate: "12deg" },
+    { top: "60%", left: "50%", rotate: "-10deg" },
+  ];
+
+  // REPLACE THESE PATHS WITH YOUR REAL PHOTOS LATER
+  const photos = [
+    "/images/image1.jpeg", 
+    "/images/image2.jpeg", 
+    "/images/image3.jpeg", 
+    "/images/image4.jpeg",
+    "/images/image1.jpeg"
+  ];
 
   return (
-    <section className="py-20 md:py-32 relative overflow-hidden p-8">
-      <div className="max-w-7xl mx-auto">
-        <motion.h2 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-4xl font-serif text-rose-900 text-center mb-16"
-        >
-          Our Memories
-        </motion.h2>
-        
-        <div className="relative h-[80vh]">
-          <AnimatePresence>
-            {photos.map((photo) => (
-              <motion.div
-                key={photo.id}
-                className="absolute draggable-photo"
-                style={{
-                  left: '50%',
-                  top: '50%',
-                  x: photo.x,
-                  y: photo.y,
-                  rotate: photo.rotate,
-                }}
-                drag
-                dragConstraints={{
-                  top: -200,
-                  left: -300,
-                  right: 300,
-                  bottom: 200,
-                }}
-                dragTransition={{ bounceStiffness: 100, bounceDamping: 10 }}
-                whileHover={{ scale: 1.05, zIndex: 10 }}
-                whileTap={{ scale: 1.1, zIndex: 20 }}
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <div className="bg-white p-2 rounded shadow-lg w-48 h-60 md:w-56 md:h-72">
-                  <div className="w-full h-4/5 overflow-hidden rounded-t">
-                    <img 
-                      src={photo.src} 
-                      alt={`Memory ${photo.id}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="p-2 text-center text-rose-800 font-serif">
-                    Memory {photo.id}
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
+    <section className="relative h-[800px] w-full bg-[#FDFBF7] overflow-hidden">
+      <h2 className="text-center font-serif text-4xl text-[#2A2A2A] pt-20 mb-8">Our Memories</h2>
+      <p className="text-center text-gray-400 mb-12">(Drag them around!)</p>
+      
+      <div className="relative w-full h-full max-w-4xl mx-auto">
+        {photos.map((src, index) => (
+          <motion.div
+            key={index}
+            drag
+            dragConstraints={{ left: -200, right: 200, top: -200, bottom: 200 }}
+            whileHover={{ scale: 1.1, zIndex: 50, rotate: 0, boxShadow: "0px 20px 40px rgba(0,0,0,0.2)" }}
+            whileTap={{ scale: 1.15, cursor: "grabbing" }}
+            style={{ 
+                position: 'absolute', 
+                top: scatterPositions[index]?.top || `${index*10}%`, 
+                left: scatterPositions[index]?.left || `${index*5}%`,
+                rotate: scatterPositions[index]?.rotate || '0deg'
+            }}
+            className="w-48 h-64 bg-white p-3 pb-8 shadow-xl rounded-sm cursor-grab transition-all border-[6px] border-white hover:shadow-2xl"
+          >
+            {/* Photo placeholder */}
+            <div className="w-full h-full bg-gray-100 overflow-hidden">
+                <img 
+                  src={src} 
+                  alt="Memory" 
+                  className="w-full h-full object-cover pointer-events-none" 
+                  onError={(e) => {
+                    e.target.style.display='none'; 
+                    e.target.parentNode.classList.add('bg-rose-100')
+                  }}
+                />
+            </div>
+          </motion.div>
+        ))}
       </div>
     </section>
   );
 };
 
-const LoveLetter = () => {
+const Letter = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="py-20 md:py-32 flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl">
-        <motion.div 
-          className="envelope"
-          onClick={() => setIsOpen(!isOpen)}
-          animate={{ 
-            rotateX: isOpen ? 180 : 0,
-            y: isOpen ? -50 : 0
-          }}
-          transition={{ duration: 0.8, type: 'spring', bounce: 0.3 }}
+    <section className="py-24 flex justify-center items-center bg-[#FDFBF7] perspective-1000">
+      <div className="relative w-[320px] h-[220px] cursor-pointer group" onClick={() => setIsOpen(!isOpen)}>
+        
+        {/* The Letter inside (slides out) */}
+        <motion.div
+          initial={false}
+          animate={isOpen ? { y: -120, zIndex: 0 } : { y: 0, zIndex: 0 }}
+          transition={{ duration: 0.6, ease: "easeInOut" }}
+          className="absolute top-4 left-4 right-4 bottom-4 bg-[#FDFBF7] border-2 border-[#D4AF37]/30 p-6 shadow-sm flex flex-col justify-center items-center text-center"
         >
-          <div className="front">
-            <div className="absolute top-0 left-0 w-0 h-0 border-t-[100px] border-t-rose-200 border-r-[320px] border-r-transparent rounded-tl-lg" />
-            <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center justify-center h-full">
-              <Mail className="w-16 h-16 text-rose-600" />
-              <span className="mt-4 text-rose-700 font-serif text-lg">Click to open</span>
-            </div>
-          </div>
-          <div className="letter">
-            <div className="p-6 h-full overflow-y-auto">
-              <h3 className="font-serif text-2xl text-rose-900 mb-4">Dear Amma,</h3>
-              <div className="space-y-4 text-rose-800">
-                <p>On this special day, I want to take a moment to tell you how much you mean to me.</p>
-                <p>Your love, strength, and wisdom have been my guiding light through every challenge and celebration.</p>
-                <p>Thank you for being my rock, my inspiration, and my biggest supporter.</p>
-                <p>May this year bring you as much joy and happiness as you've brought into my life.</p>
-                <p>With all my love,</p>
-                <p className="font-serif text-xl mt-6">Vikram</p>
-              </div>
-            </div>
-          </div>
+          <p className="font-serif text-[#8B4513] text-lg italic">
+            "Amma, you are my greatest inspiration. Thank you for being my dawn, every single day."
+          </p>
+          <p className="font-sans text-sm text-rose-400 mt-4">- Vikram</p>
+        </motion.div>
+
+        {/* Envelope Body (Front) */}
+        <div className="absolute inset-0 bg-rose-200 rounded-b-xl shadow-xl z-10 border-t-4 border-white overflow-hidden flex items-end justify-center pb-4">
+             {!isOpen && <p className="text-rose-800 font-serif tracking-widest">Click to open</p>}
+        </div>
+        
+        {/* Envelope Flap (Top) - Animates open */}
+        <motion.div
+            initial={false}
+            animate={isOpen ? { rotateX: 180 } : { rotateX: 0 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            style={{ transformOrigin: "top" }}
+            className="absolute top-0 left-0 w-full h-1/2 bg-rose-300 z-20 rounded-t-xl shadow-md border-b-4 border-white flex items-center justify-center"
+        >
+            <Mail className="text-white drop-shadow-md" size={32} />
         </motion.div>
       </div>
     </section>
@@ -441,8 +428,8 @@ const App = () => {
       <AuroraBackground />
       <Hero />
       <HaikuSection />
-      <MemoryGallery />
-      <LoveLetter />
+      <Gallery />
+      <Letter />
       <CakeSection />
       <Footer />
     </div>
