@@ -8,57 +8,238 @@ const AuroraBackground = () => (
   <div className="fixed inset-0 -z-10 aurora-bg" />
 );
 
-const Hero = () => (
-  <section className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
-    <motion.h1 
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
-      className="font-serif text-5xl md:text-7xl text-rose-900 mb-4"
-    >
-      Happy Birthday, <br className="md:hidden" />
-      <span className="text-rose-700">Simithaa</span>
-    </motion.h1>
-    <motion.p 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 0.5, duration: 1 }}
-      className="text-rose-800 text-lg md:text-xl mt-4 max-w-2xl"
-    >
-      A celebration of your love, strength, and grace
-    </motion.p>
-  </section>
-);
+const Hero = () => {
+  const [showConfetti, setShowConfetti] = useState(true);
+  
+  return (
+    <section className="relative py-20 md:py-32 flex flex-col items-center justify-center p-6 text-center overflow-hidden">
+      {/* Floating Hearts */}
+      {[...Array(15)].map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute text-pink-400 opacity-70"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+            fontSize: `${Math.random() * 20 + 10}px`,
+          }}
+          animate={{
+            y: [0, -100],
+            opacity: [0.7, 0],
+            scale: [1, 1.5],
+          }}
+          transition={{
+            duration: Math.random() * 3 + 2,
+            repeat: Infinity,
+            repeatType: 'loop',
+            delay: Math.random() * 5,
+          }}
+        >
+          ❤️
+        </motion.div>
+      ))}
+      
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.8, type: 'spring' }}
+        className="relative z-10"
+      >
+        <div className="relative inline-block">
+          <motion.div 
+            className="absolute -inset-4 bg-rose-100 rounded-full opacity-70"
+            animate={{
+              scale: [1, 1.1, 1],
+              opacity: [0.7, 0.9, 0.7],
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              repeatType: 'reverse',
+            }}
+          />
+          <motion.h1 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="font-serif text-5xl md:text-7xl text-rose-900 mb-4 relative z-10"
+          >
+            Happy Birthday <span className="block md:inline">Amma</span> <br className="md:hidden" />
+            <motion.span 
+              className="text-rose-700 inline-block"
+              animate={{
+                scale: [1, 1.1, 1],
+                rotate: [-5, 5, -5],
+              }}
+              transition={{
+                duration: 3,
+                repeat: Infinity,
+                repeatType: 'reverse',
+              }}
+            >
+              Simithaa! 🎉
+            </motion.span>
+          </motion.h1>
+        </div>
+        
+        <motion.p 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.4, duration: 0.8 }}
+          className="text-rose-800 text-xl md:text-2xl mt-6 max-w-2xl font-medium"
+        >
+          A celebration of your love, strength, and grace
+        </motion.p>
+        
+        <motion.div 
+          className="mt-8 flex justify-center gap-4"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-6 py-3 bg-gradient-to-r from-pink-500 to-rose-600 text-white rounded-full font-medium shadow-lg flex items-center gap-2"
+          >
+            <Sparkles className="w-5 h-5" />
+            Send Love
+          </motion.button>
+        </motion.div>
+      </motion.div>
+      
+      <AnimatePresence>
+        {showConfetti && (
+          <Confetti
+            width={typeof window !== 'undefined' ? window.innerWidth : 0}
+            height={typeof window !== 'undefined' ? window.innerHeight : 0}
+            recycle={false}
+            numberOfPieces={200}
+            onConfettiComplete={() => setShowConfetti(false)}
+            className="w-full h-full"
+          />
+        )}
+      </AnimatePresence>
+    </section>
+  );
+};
 
 const HaikuSection = () => {
   const lines = [
-    "Dice roll, time slips past",
-    "Years crest and break",
-    "like the immutable tide",
-    "Here for all your dawn"
+    { text: "Dice roll, time slips past", emoji: "🎲" },
+    { text: "Years crest and break", emoji: "🌊" },
+    { text: "like the immutable tide", emoji: "⏳" },
+    { text: "Here for all your dawn", emoji: "🌅" },
+    { text: "Happy Birthday Amma!", emoji: "🎂" }
   ];
 
+  // Floating decorative elements
+  const floatingElements = ["✨", "🌸", "🎈", "🎁", "💝", "🎊"];
+
   return (
-    <section className="min-h-screen flex items-center justify-center p-6">
+    <section className="relative py-20 md:py-32 flex items-center justify-center p-6 overflow-hidden">
+      {/* Floating decorative elements */}
+      {[...Array(12)].map((_, i) => {
+        const element = floatingElements[Math.floor(Math.random() * floatingElements.length)];
+        return (
+          <motion.div
+            key={i}
+            className="absolute text-2xl md:text-3xl opacity-70"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              transform: `rotate(${Math.random() * 360}deg)`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              rotate: [0, 360],
+            }}
+            transition={{
+              duration: Math.random() * 10 + 10,
+              repeat: Infinity,
+              ease: "linear",
+              delay: Math.random() * 5,
+            }}
+          >
+            {element}
+          </motion.div>
+        );
+      })}
+
       <motion.div 
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl max-w-2xl w-full"
+        viewport={{ once: true, margin: "-100px" }}
+        className="relative z-10 bg-white/90 backdrop-blur-sm p-8 md:p-12 rounded-3xl shadow-2xl max-w-2xl w-full border-2 border-rose-100 transform transition-all hover:shadow-xl hover:scale-[1.02]"
       >
-        <div className="space-y-6">
-          {lines.map((line, i) => (
-            <motion.p
-              key={i}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.3 }}
-              className="font-serif text-2xl md:text-3xl italic text-rose-900 text-center leading-relaxed"
-            >
-              {line}
-            </motion.p>
-          ))}
+        <motion.div 
+          className="absolute -top-5 -right-5 bg-gradient-to-r from-pink-500 to-rose-600 text-white w-12 h-12 rounded-full flex items-center justify-center text-2xl shadow-lg"
+          animate={{ rotate: [0, 20, -20, 0] }}
+          transition={{ duration: 3, repeat: Infinity, repeatType: 'reverse' }}
+        >
+          ✨
+        </motion.div>
+        
+        <motion.div 
+          className="absolute -bottom-4 -left-4 bg-yellow-400 w-10 h-10 rounded-full flex items-center justify-center text-xl shadow-lg"
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 2, repeat: Infinity, repeatType: 'reverse' }}
+        >
+          ⭐
+        </motion.div>
+
+        <div className="space-y-8 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="font-serif text-3xl md:text-4xl text-rose-900 mb-2">For My Dearest Amma</h2>
+            <div className="w-20 h-1 bg-gradient-to-r from-pink-400 to-rose-500 mx-auto rounded-full"></div>
+          </motion.div>
+
+          <div className="space-y-8">
+            {lines.map(({text, emoji}, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ 
+                  duration: 0.6, 
+                  delay: i * 0.2,
+                  type: "spring",
+                  stiffness: 100
+                }}
+                className="flex items-center gap-4 group"
+              >
+                <motion.span 
+                  className="text-3xl transform transition-transform group-hover:scale-125 group-hover:rotate-12"
+                  animate={{ 
+                    rotate: [0, 10, -10, 0],
+                  }}
+                  transition={{ 
+                    duration: 3, 
+                    repeat: Infinity, 
+                    repeatType: 'reverse',
+                    delay: i * 0.5
+                  }}
+                >
+                  {emoji}
+                </motion.span>
+                <motion.p 
+                  className={`font-serif text-xl md:text-2xl ${
+                    i === lines.length - 1 
+                      ? 'text-2xl md:text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-600 to-rose-600' 
+                      : 'text-rose-900'
+                  }`}
+                >
+                  {text}
+                </motion.p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </motion.div>
     </section>
@@ -77,7 +258,7 @@ const MemoryGallery = () => {
   );
 
   return (
-    <section className="min-h-screen relative overflow-hidden p-8">
+    <section className="py-20 md:py-32 relative overflow-hidden p-8">
       <div className="max-w-7xl mx-auto">
         <motion.h2 
           initial={{ opacity: 0, y: 20 }}
@@ -140,7 +321,7 @@ const LoveLetter = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <section className="min-h-screen flex items-center justify-center p-6">
+    <section className="py-20 md:py-32 flex items-center justify-center p-6">
       <div className="w-full max-w-2xl">
         <motion.div 
           className="envelope"
@@ -197,7 +378,7 @@ const CakeSection = () => {
   }, []);
 
   return (
-    <section className="py-32 bg-[#D3E0DC]/20 flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+    <section className="py-20 md:py-32 bg-[#D3E0DC]/20 flex flex-col items-center justify-center text-center px-4 overflow-hidden">
       {wished && <Confetti width={windowSize.width} height={windowSize.height} recycle={false} numberOfPieces={500} />}
       
       <motion.div 
