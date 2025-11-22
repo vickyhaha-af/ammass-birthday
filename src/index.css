@@ -23,31 +23,88 @@ h1, h2, h3, h4, h5, h6 {
     @apply scroll-smooth;
   }
   body {
-    @apply bg-[#FDFBF7] text-gray-800 font-sans;
+    @apply min-h-screen bg-gradient-to-br from-rose-50 via-cream to-amber-50 bg-cover;
   }
 }
 
-/* Custom scrollbar */
+/* Aurora Background */
+.aurora-bg {
+  background: linear-gradient(
+    -45deg, 
+    rgba(253, 251, 247, 0.8), 
+    rgba(248, 231, 235, 0.8), 
+    rgba(232, 213, 196, 0.8), 
+    rgba(255, 247, 237, 0.8)
+  );
+  background-size: 400% 400%;
+  animation: aurora 15s ease infinite;
+}
+
+@keyframes aurora {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* Envelope Styles */
+.envelope {
+  @apply relative w-64 h-40 bg-rose-100 rounded-lg shadow-lg cursor-pointer transition-all duration-300;
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(0deg);
+}
+
+.envelope.open {
+  transform: perspective(1000px) rotateX(180deg);
+}
+
+.envelope .front {
+  @apply absolute w-full h-full bg-rose-100 rounded-lg;
+  backface-visibility: hidden;
+  z-index: 2;
+  transform: rotateX(0deg);
+}
+
+.envelope .letter {
+  @apply absolute w-full h-full bg-cream p-6 rounded-lg;
+  transform: rotateX(180deg);
+  backface-visibility: hidden;
+  z-index: 1;
+}
+
+/* Draggable Photo */
+.draggable-photo {
+  @apply absolute cursor-grab active:cursor-grabbing;
+  touch-action: none;
+  will-change: transform;
+  transition: transform 0.1s ease, box-shadow 0.2s ease;
+}
+
+.draggable-photo:active {
+  @apply shadow-2xl;
+  transform: scale(1.05) !important;
+  z-index: 10;
+}
+
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   @apply w-2;
 }
+
 ::-webkit-scrollbar-track {
   @apply bg-transparent;
 }
+
 ::-webkit-scrollbar-thumb {
-  @apply bg-[#D4AF37] rounded-full;
+  @apply bg-rose-300 rounded-full;
 }
 
-/* Glassmorphism effect */
-.glass-card {
-  @apply backdrop-blur-sm bg-white/30;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+/* Animations */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
-.text-shadow {
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
 
 .blob {

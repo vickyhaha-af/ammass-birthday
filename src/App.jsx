@@ -1,48 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { Dices, Heart, Sparkles } from 'lucide-react';
-import Confetti from 'react-confetti';
+import React, { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Mail, Heart } from 'lucide-react'
 
-// --- Components ---
+// Components
+const AuroraBackground = () => (
+  <div className="fixed inset-0 -z-10 aurora-bg" />
+)
 
-const Hero = () => {
-  return (
-    <section className="relative h-screen w-full flex items-center justify-center overflow-hidden bg-[#FDFBF7]">
-      {/* Animated Background Blobs */}
-      <motion.div 
-        animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
-        transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-        className="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-[#E8D5C4] rounded-full mix-blend-multiply filter blur-3xl opacity-30"
-      />
-      <motion.div 
-        animate={{ scale: [1, 1.5, 1], rotate: [0, -60, 0] }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        className="absolute bottom-[-10%] right-[-10%] w-[600px] h-[600px] bg-[#D3E0DC] rounded-full mix-blend-multiply filter blur-3xl opacity-30"
-      />
-
-      {/* Text Content */}
-      <div className="z-10 text-center p-6">
-        <motion.h1 
-          initial={{ opacity: 0, y: 50 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.5, ease: "easeOut" }}
-          className="font-serif text-5xl md:text-7xl text-[#2A2A2A] mb-4"
-        >
-          Happy 46th Birthday,<br />
-          <span className="text-[#D4AF37]">Simithaa</span>
-        </motion.h1>
-        <motion.p 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1, duration: 1 }}
-          className="font-sans text-gray-500 text-lg tracking-widest uppercase"
-        >
-          Elegance • Grace • Love
-        </motion.p>
-      </div>
-    </section>
-  );
-};
+const Hero = () => (
+  <section className="min-h-screen flex flex-col items-center justify-center p-6 text-center">
+    <motion.h1 
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="font-serif text-5xl md:text-7xl text-rose-900 mb-4"
+    >
+      Happy Birthday, <br className="md:hidden" />
+      <span className="text-rose-700">Simithaa</span>
+    </motion.h1>
+    <motion.p 
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.5, duration: 1 }}
+      className="text-rose-800 text-lg md:text-xl mt-4 max-w-2xl"
+    >
+      A celebration of your love, strength, and grace
+    </motion.p>
+  </section>
+)
 
 const HaikuSection = () => {
   const lines = [
@@ -50,9 +35,161 @@ const HaikuSection = () => {
     "Years crest and break",
     "like the immutable tide",
     "Here for all your dawn"
-  ];
+  ]
 
   return (
+    <section className="min-h-screen flex items-center justify-center p-6">
+      <motion.div 
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-xl max-w-2xl w-full"
+      >
+        <div className="space-y-6">
+          {lines.map((line, i) => (
+            <motion.p
+              key={i}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.3 }}
+              className="font-serif text-2xl md:text-3xl italic text-rose-900 text-center leading-relaxed"
+            >
+              {line}
+            </motion.p>
+          ))}
+        </div>
+      </motion.div>
+    </section>
+  )
+}
+
+const MemoryGallery = () => {
+  const [photos] = useState(() => 
+    Array.from({ length: 8 }, (_, i) => ({
+      id: i + 1,
+      x: Math.random() * 60 - 30,
+      y: Math.random() * 40 - 20,
+      rotate: Math.random() * 20 - 10,
+      src: `/images/image${(i % 4) + 1}.jpeg`
+    }))
+  )
+
+  return (
+    <section className="min-h-screen relative overflow-hidden p-8">
+      <div className="max-w-7xl mx-auto">
+        <motion.h2 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-4xl font-serif text-rose-900 text-center mb-16"
+        >
+          Our Memories
+        </motion.h2>
+        
+        <div className="relative h-[80vh]">
+          <AnimatePresence>
+            {photos.map((photo) => (
+              <motion.div
+                key={photo.id}
+                className="absolute draggable-photo"
+                style={{
+                  left: '50%',
+                  top: '50%',
+                  x: photo.x,
+                  y: photo.y,
+                  rotate: photo.rotate,
+                }}
+                drag
+                dragConstraints={{
+                  top: -200,
+                  left: -300,
+                  right: 300,
+                  bottom: 200,
+                }}
+                dragTransition={{ bounceStiffness: 100, bounceDamping: 10 }}
+                whileHover={{ scale: 1.05, zIndex: 10 }}
+                whileTap={{ scale: 1.1, zIndex: 20 }}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                <div className="bg-white p-2 rounded shadow-lg w-48 h-60 md:w-56 md:h-72">
+                  <div className="w-full h-4/5 overflow-hidden rounded-t">
+                    <img 
+                      src={photo.src} 
+                      alt={`Memory ${photo.id}`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <div className="p-2 text-center text-rose-800 font-serif">
+                    Memory {photo.id}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const LoveLetter = () => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <section className="min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-2xl">
+        <motion.div 
+          className="envelope"
+          onClick={() => setIsOpen(!isOpen)}
+          animate={{ 
+            rotateX: isOpen ? 180 : 0,
+            y: isOpen ? -50 : 0
+          }}
+          transition={{ duration: 0.8, type: 'spring', bounce: 0.3 }}
+        >
+          <div className="front">
+            <div className="absolute top-0 left-0 w-0 h-0 border-t-[100px] border-t-rose-200 border-r-[320px] border-r-transparent rounded-tl-lg" />
+            <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center justify-center h-full">
+              <Mail className="w-16 h-16 text-rose-600" />
+              <span className="mt-4 text-rose-700 font-serif text-lg">Click to open</span>
+            </div>
+          </div>
+          <div className="letter">
+            <div className="p-6 h-full overflow-y-auto">
+              <h3 className="font-serif text-2xl text-rose-900 mb-4">Dear Amma,</h3>
+              <div className="space-y-4 text-rose-800">
+                <p>On this special day, I want to take a moment to tell you how much you mean to me.</p>
+                <p>Your love, strength, and wisdom have been my guiding light through every challenge and celebration.</p>
+                <p>Thank you for being my rock, my inspiration, and my biggest supporter.</p>
+                <p>May this year bring you as much joy and happiness as you've brought into my life.</p>
+                <p>With all my love,</p>
+                <p className="font-serif text-xl mt-6">Vikram</p>
+              </div>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  )
+}
+
+const Footer = () => (
+  <footer className="py-12 text-center text-rose-700">
+    <p className="flex items-center justify-center gap-2">
+      Made with <Heart className="w-5 h-5 fill-rose-500 text-rose-500" /> by M S Vikram
+    </p>
+  </footer>
+)
+
+// Main App Component
+export default function App() {
+  return (
+    <div className="relative">
+      <AuroraBackground />
+      <Hero />
     <section className="min-h-[80vh] flex items-center justify-center bg-[#FDFBF7] py-20 px-4">
       <motion.div 
         initial={{ opacity: 0, scale: 0.9 }}
@@ -114,26 +251,42 @@ const HaikuSection = () => {
 const Gallery = () => {
   // PLACEHOLDERS: Replace src with actual paths like "/mom1.jpg" later
   const photos = [
-    { id: 1, color: "bg-red-100", rotation: "rotate-2" },
-    { id: 2, color: "bg-blue-100", rotation: "-rotate-1" },
-    { id: 3, color: "bg-green-100", rotation: "rotate-3" },
+    { id: 1, src: "/images/image1.jpeg", alt: "Beautiful memory 1", rotation: "rotate-2" },
+    { id: 2, src: "/images/image2.jpeg", alt: "Beautiful memory 2", rotation: "-rotate-1" },
+    { id: 3, src: "/images/image3.jpeg", alt: "Beautiful memory 3", rotation: "rotate-3" },
+    { id: 4, src: "/images/image4.jpeg", alt: "Beautiful memory 4", rotation: "-rotate-2" },
   ];
 
   return (
     <section className="py-20 bg-[#FDFBF7]">
-      <h2 className="text-center font-serif text-4xl text-[#2A2A2A] mb-16">Beautiful Moments</h2>
-      <div className="flex flex-wrap justify-center gap-8 px-4">
+      <motion.h2 
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="text-center font-serif text-4xl text-[#2A2A2A] mb-16"
+      >
+        Cherished Memories
+      </motion.h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 px-4 max-w-7xl mx-auto">
         {photos.map((photo) => (
           <motion.div
             key={photo.id}
-            whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
-            className={`w-64 h-80 bg-white p-4 shadow-lg rounded-sm transform ${photo.rotation} transition-all duration-500 ease-out`}
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.05, zIndex: 10 }}
+            transition={{ duration: 0.5 }}
+            className={`bg-white p-4 shadow-lg rounded-sm transform ${photo.rotation} hover:rotate-0 transition-all duration-300`}
           >
-            {/* Image Container (Gray Box for now) */}
-            <div className={`w-full h-5/6 ${photo.color} mb-4 bg-gray-200 flex items-center justify-center text-gray-400`}>
-              <span className="text-sm">Photo {photo.id}</span>
+            <div className="w-full h-64 overflow-hidden mb-4">
+              <img 
+                src={photo.src} 
+                alt={photo.alt}
+                className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
             </div>
-            <div className="text-center font-handwriting text-gray-500 text-sm">
+            <div className="text-center font-sans text-gray-600 text-sm">
               Memory {photo.id}
             </div>
           </motion.div>
